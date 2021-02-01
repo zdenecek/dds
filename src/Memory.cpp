@@ -13,25 +13,12 @@
 
 Memory::Memory()
 {
-  Memory::Reset();
 }
 
 
 Memory::~Memory()
 {
-}
-
-
-void Memory::Reset()
-{
-  nThreads = 0;
-}
-
-
-void Memory::ResetThread(const unsigned thrId)
-{
-  memory[thrId]->transTable->ResetMemory(TT_RESET_FREE_MEMORY);
-  memory[thrId]->memUsed = Memory::MemoryInUseMB(thrId);
+  Memory::Resize(0, DDS_TT_SMALL, 0, 0);
 }
 
 
@@ -49,15 +36,14 @@ void Memory::Resize(
   const int memDefault_MB,
   const int memMaximum_MB)
 {
-  if (nThreads == n)
+  if (memory.size() == n)
     return;
 
-  if (nThreads > n)
+  if (memory.size() > n)
   {
     // Downsize.
-    for (unsigned i = n; i < nThreads; i++)
+    for (unsigned i = n; i < memory.size(); i++)
     {
-      memory[i]->transTable->ReturnAllMemory();
       delete memory[i]->transTable;
       delete memory[i];
     }
@@ -67,11 +53,12 @@ void Memory::Resize(
   else
   {
     // Upsize.
+    unsigned oldSize = memory.size();
     memory.resize(n);
     threadSizes.resize(n);
-    for (unsigned i = nThreads; i < n; i++)
+    for (unsigned i = oldSize; i < n; i++)
     {
-      memory[i] = new ThreadData;
+      memory[i] = new ThreadData();
       if (flag == DDS_TT_SMALL)
       {
         memory[i]->transTable = new TransTableS;
@@ -89,22 +76,20 @@ void Memory::Resize(
       memory[i]->transTable->MakeTT();
     }
   }
-
-  nThreads = n;
 }
 
 
-int Memory::NumThreads() const
+unsigned Memory::NumThreads() const
 {
-  return static_cast<int>(nThreads);
+  return static_cast<unsigned>(memory.size());
 }
 
 
 ThreadData * Memory::GetPtr(const unsigned thrId)
 {
-  if (thrId >= nThreads)
+  if (thrId >= memory.size())
   {
-    cout << "Memory::GetPtr: " << thrId << " vs. " << nThreads << endl;
+    cout << "Memory::GetPtr: " << thrId << " vs. " << memory.size() << endl;
     exit(1);
   }
   return memory[thrId];
@@ -115,12 +100,6 @@ double Memory::MemoryInUseMB(const unsigned thrId) const
 {
   return memory[thrId]->transTable->MemoryInUse() +
     8192. * sizeof(relRanksType) / static_cast<double>(1024.);
-}
-
-
-void Memory::ReturnAllMemory()
-{
-  Memory::Resize(0, DDS_TT_SMALL, 0, 0);
 }
 
 
