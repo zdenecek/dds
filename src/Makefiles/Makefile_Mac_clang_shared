@@ -29,7 +29,7 @@ CC_BOOST	?= /usr/local/Cellar/boost/1.56.0
 CC_BOOST_INCL	= $(CC_BOOST)/include
 CC_BOOST_LINK	= -L$(CC_BOOST)/lib -lboost_system -lboost_thread-mt
 
-THREAD_COMPILE	= 
+THREAD_COMPILE	= $(CC_BOOST_LINK)
 THREAD_LINK	= $(CC_BOOST_LINK)
 
 # 2. Debugging options.  (There are more granular options in debug.h.)
