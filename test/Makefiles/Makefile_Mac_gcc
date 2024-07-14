@@ -15,7 +15,7 @@
 # If you need to add something for the threading system, this is
 # the place.
 
-CC_BOOST	= /usr/local/Cellar/boost/1.56.0
+CC_BOOST	?= /usr/local/Cellar/boost/1.56.0
 CC_BOOST_LINK	= -L$(CC_BOOST)/lib -lboost_system -lboost_thread-mt
 
 THREAD_LINK	= $(CC_BOOST_LINK)
