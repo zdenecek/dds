@@ -4,6 +4,11 @@ This is a fork of the [dds](https://github.com/dds-bridge/dds) project.
 
 This branch is used for compiling to wasm, see [zdenecek/dds-wasm](https://github.com/zdenecek/dds-wasm).
 
+## Acknowledgments
+
+1. [Double Dummy Analysis in a web browser](https://grahamhazel.com/blog/2023/02/06/double-dummy-analysis-in-a-web-browser/) - Graham Hazel - Wrote an amazing article describing how to convert dds to wasm
+2. [dds fork by Aaron Hutton](https://github.com/aaron-hutton/dds) - Aaron Hutton - Fork of the dds project with changes from Graham Hazel's article
+
 ## Credits
 
 (c) Bo Haglund 2006-2014, (c) Bo Haglund / Soren Hein 2014-2018.
